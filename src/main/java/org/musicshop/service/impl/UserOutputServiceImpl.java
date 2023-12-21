@@ -1,8 +1,8 @@
 package org.musicshop.service.impl;
 
+import org.apache.commons.lang3.StringUtils;
 import org.musicshop.service.UserOutputService;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.util.Objects;
 
@@ -10,7 +10,7 @@ import java.util.Objects;
 public class UserOutputServiceImpl implements UserOutputService {
     @Override
     public void print(final String msg) {
-        if (!StringUtils.hasLength(msg) || msg.isBlank())
+        if (StringUtils.isBlank(msg))
             throw new IllegalArgumentException("ERROR: can't print null or empty message.");
 
         System.out.println(msg);
@@ -25,7 +25,7 @@ public class UserOutputServiceImpl implements UserOutputService {
 
     @Override
     public void error(String msg) {
-        if (!StringUtils.hasLength(msg) || msg.isBlank())
+        if (StringUtils.isBlank(msg))
             throw new IllegalArgumentException("ERROR: can't print null or empty error message.");
 
         System.err.println(msg);

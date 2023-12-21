@@ -1,28 +1,18 @@
 package org.musicshop.service.impl;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.StreamReadFeature;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.lang3.StringUtils;
 import org.musicshop.db.FakeStaticDb;
-import org.musicshop.pojo.Product;
-import org.musicshop.pojo.model.ProductInfo;
 import org.musicshop.pojo.model.Sales;
-import org.musicshop.service.DatabaseInitService;
-import org.musicshop.service.RelationshipGenerationService;
-import org.musicshop.service.UserOutputService;
+import org.musicshop.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
-import java.util.Arrays;
+import java.util.Objects;
 
-/**
- * Sets up our fake DB, imagine JDBC services here.
- */
 @Service
 public class DatabaseInitServiceImpl implements DatabaseInitService {
 
@@ -39,17 +29,41 @@ public class DatabaseInitServiceImpl implements DatabaseInitService {
     @Autowired
     private RelationshipGenerationService relationshipGenerationService;
 
+    @Autowired
+    private UserInfoGenerationService userInfoGenerationService;
+
+    @Autowired
+    private PurchaseInfoGenerationService purchaseInfoGenerationService;
+
     @Override
     public void init(final String json) {
 
-        if (!StringUtils.hasLength(json) || json.isBlank())
-            throw new IllegalArgumentException("ERROR: can't parse null or empty JSON.");
+        if (StringUtils.isBlank(json))
+            return;
 
         try {
             // Take in our sample sales input and store.
-            FakeStaticDb.addProductsFromSales(JSON_MAPPER.readValue(json, Sales.class));
+            final var unmarshalledJsonSales = JSON_MAPPER.readValue(json, Sales.class);
+            handleDbGenerationFromJson(unmarshalledJsonSales);
         } catch (JsonProcessingException exception) {
             userOutputService.error(exception.getMessage());
         }
+    }
+
+    private void handleDbGenerationFromJson(final Sales sales) {
+        if (Objects.isNull(sales))
+            throw new IllegalArgumentException("ERROR: Can't add null product to DB.");
+        else if (sales.getSales().length == 0)
+            return;
+
+        // Generate users and their orders.
+        final var userInfo = userInfoGenerationService.generateUserInfo(sales);
+        // Generate purchases and their totals.
+        final var purchaseInfo = purchaseInfoGenerationService.generatePurchaseInfo(userInfo);
+        // Generate relationships between all user orders.
+        final var relationshipInfo = relationshipGenerationService.generateProductRelationships(userInfo, purchaseInfo);
+
+        // Store in DB for later querying.
+        FakeStaticDb.addRelationships(relationshipInfo);
     }
 }

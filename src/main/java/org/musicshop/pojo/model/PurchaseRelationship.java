@@ -1,12 +1,11 @@
 package org.musicshop.pojo.model;
 
-import org.musicshop.pojo.Product;
 import org.musicshop.pojo.Relationship;
 
 public class PurchaseRelationship extends ProductInfo implements Relationship {
 
     private long related;
-    private long m1;
+    private double m1;
 
     public PurchaseRelationship() {}
 
@@ -20,7 +19,7 @@ public class PurchaseRelationship extends ProductInfo implements Relationship {
     public PurchaseRelationship(final long product,
                                 final long related,
                                 final long qty,
-                                final long m1) {
+                                final double m1) {
         super(product, qty);
 
         this.related = related;
@@ -36,11 +35,11 @@ public class PurchaseRelationship extends ProductInfo implements Relationship {
         this.related = related;
     }
 
-    public long getM1() {
+    public double getM1() {
         return m1;
     }
 
-    public void setM1(long m1) {
+    public void setM1(double m1) {
         this.m1 = m1;
     }
 
@@ -50,7 +49,7 @@ public class PurchaseRelationship extends ProductInfo implements Relationship {
                 "product=" + super.getProduct() +
                 ", qty=" + super.getQty() +
                 ", related=" + related +
-                ", m1=" + m1 +
+                ", m1=" + String.format("%.2f", m1) +
                 '}';
     }
 }

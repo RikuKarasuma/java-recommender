@@ -3,6 +3,8 @@ package org.musicshop.pojo.model;
 import org.musicshop.pojo.Product;
 import org.musicshop.pojo.Sizing;
 
+import java.util.Objects;
+
 /**
  * Originally used record type however class gives us easier polymorphism in this case.
  */
@@ -44,5 +46,18 @@ public class ProductInfo implements Product, Sizing {
                 "product=" + product +
                 ", qty=" + qty +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProductInfo that = (ProductInfo) o;
+        return product == that.product && qty == that.qty;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(product, qty);
     }
 }

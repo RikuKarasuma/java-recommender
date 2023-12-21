@@ -27,4 +27,12 @@ public class Sale implements Product, User {
     public void setUser(long user) {
         this.user = user;
     }
+
+    @Override
+    public String toString() {
+        return "Sale{" +
+                "product=" + product +
+                ", user=" + user +
+                '}';
+    }
 }

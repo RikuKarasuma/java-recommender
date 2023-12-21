@@ -18,7 +18,7 @@ public class Start {
 
         final ExecutionService executionService = applicationContext.getBean(ExecutionService.class);
         // Start our main input loop.
-        executionService.initAndRead(true);
+        executionService.initAndRead(true, "src/test/resources/sales-report.json");
 
         applicationContext.close();
     }
