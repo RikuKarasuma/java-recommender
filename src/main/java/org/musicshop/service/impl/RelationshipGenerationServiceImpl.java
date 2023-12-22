@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class RelationshipGenerationServiceImpl implements RelationshipGenerationService {
@@ -19,34 +20,32 @@ public class RelationshipGenerationServiceImpl implements RelationshipGeneration
             return Collections.emptyList();
 
         final List<Relationship> productRelationships = new ArrayList<>();
+        for (final Map.Entry<Long, List<Long>> userGroupedPurchases : purchasesByUser.entrySet()) {
 
-        for (final Map.Entry<Long, List<Long>> userAndOrders : purchasesByUser.entrySet()) {
+            final var relatedItems = userGroupedPurchases.getValue()
+                    .stream()
+                    .map(purchasedProductId -> allPurchases.stream().filter(product -> product.getProduct() == purchasedProductId).findAny().orElseThrow(RuntimeException::new))
+                    .toList();
 
-            final var distinctUserOrders = userAndOrders.getValue().stream().distinct().toList();
+            for (int i = 0; i < relatedItems.size(); i ++) {
+                final var relatedZero = relatedItems.get(i);
+                for (int x = 1; x < relatedItems.size(); x ++) {
+                    final var relatedOne = relatedItems.get(x);
+                    if (relatedZero.getProduct() == relatedOne.getProduct())
+                        continue;
 
-            for ( int i = 0, x = 1; x < distinctUserOrders.size(); i ++, x ++) {
-                final long userOrder =  distinctUserOrders.get(i);
-                final long nextUserOrder =  distinctUserOrders.get(x);
+                    final var purchaseRelationship = new PurchaseRelationship();
+                    final var totalPurchasedBoth = relatedZero.getQty() + relatedOne.getQty();
+                    // Calculate relationship correlation factor.
+                    final var m1CorrelationFactor = (totalPurchasedBoth / relatedZero.getQty());
+                    final var finalM1BetweenZeroAndOne = Math.min((m1CorrelationFactor * .1), 1d);
 
-                final var purchaseRelationship = new PurchaseRelationship();
-
-                // Both these must exist or throw runtime error as we can't
-                // have an existing order and non-existing product.
-                final var thisPurchaseInfo = allPurchases.stream().filter(purchaseInfo -> purchaseInfo.getProduct() == userOrder).findAny().orElseThrow(RuntimeException::new);
-                final var nextPurchaseInfo = allPurchases.stream().filter(purchaseInfo -> purchaseInfo.getProduct() == nextUserOrder).findAny().orElseThrow(RuntimeException::new);
-
-                // Calculate totals
-                final var totalWhoBoughtProduct = purchasesByUser.entrySet().stream().filter(mapUserAndOrders -> mapUserAndOrders.getValue().contains(userOrder)).count();
-                final var totalPurchasedBoth = thisPurchaseInfo.getQty() + nextPurchaseInfo.getQty();
-                // Calculate relationship correlation factor.
-                final var m1CorrelationFactor = (totalPurchasedBoth / totalWhoBoughtProduct);
-                final var finalM1BetweenZeroAndOne = Math.min( (m1CorrelationFactor * .1), 1d);
-
-                purchaseRelationship.setProduct(userOrder);
-                purchaseRelationship.setRelated(nextPurchaseInfo.getProduct());
-                purchaseRelationship.setQty(totalPurchasedBoth);
-                purchaseRelationship.setM1(finalM1BetweenZeroAndOne);
-                productRelationships.add(purchaseRelationship);
+                    purchaseRelationship.setProduct(relatedZero.getProduct());
+                    purchaseRelationship.setRelated(relatedOne.getProduct());
+                    purchaseRelationship.setQty(totalPurchasedBoth);
+                    purchaseRelationship.setM1(finalM1BetweenZeroAndOne);
+                    productRelationships.add(purchaseRelationship);
+                }
             }
         }
 

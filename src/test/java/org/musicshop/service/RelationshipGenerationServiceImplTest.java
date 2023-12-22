@@ -75,12 +75,18 @@ public class RelationshipGenerationServiceImplTest {
                 generatedTotalPurchaseInfo);
 
         final var expectedRelatedInfo = Arrays.asList(
+            new PurchaseRelationship(2, 1, 5, 0.5d),
+            new PurchaseRelationship(3, 1, 5, 0.5d),
             new PurchaseRelationship(2, 3, 2, 0.2d),
-            new PurchaseRelationship(1, 2, 5, 0.1d),
-            new PurchaseRelationship(1, 4, 5, 0.1d)
+            new PurchaseRelationship(3, 2, 2, 0.20),
+            new PurchaseRelationship(1, 2, 5, 0.10),
+            new PurchaseRelationship(1, 3, 5, 0.10),
+            new PurchaseRelationship(1, 2, 5, 0.10),
+            new PurchaseRelationship(1, 3, 5, 0.10),
+            new PurchaseRelationship(1, 4, 5, 0.10)
         );
 
-        final var expectedSize = 3;
+        final var expectedSize = 9;
         assertEquals(expectedSize, expectedRelatedInfo.size());
         assertIterableEquals(expectedRelatedInfo, relationships);
     }

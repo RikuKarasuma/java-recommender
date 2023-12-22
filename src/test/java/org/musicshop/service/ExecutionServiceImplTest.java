@@ -77,38 +77,56 @@ public class ExecutionServiceImplTest {
     // Basic smoke tests
     @Test
     public void shouldCorrectlyLoadAndGenerateAllUniqueRelationshipsThenQuit() {
-        final var totalDistinctRelationships = 38188;
+        final var totalDistinctRelationships = 3336613;
         when(userInputServiceMock.read()).thenReturn("q");
         executionService.initAndRead(false, "src/test/resources/sales-report.json");
-        assertEquals(FakeStaticDb.getRelationships().size(), totalDistinctRelationships);
+        assertEquals(totalDistinctRelationships, FakeStaticDb.getRelationships().size());
         verify(userOutputServiceMock, times(1)).print("Quiting.... goodbye");
     }
 
     @Test
     public void shouldCorrectlyDisplayAllRelatedThenQuit() {
-        when(userInputServiceMock.read()).thenReturn("59831");
+        when(userInputServiceMock.read()).thenReturn("59959");
         executionService.initAndRead(false, "src/test/resources/sales-report.json");
         verify(userOutputServiceMock, times(1)).print(
-            "PurchaseRelationship{product=36426, qty=23, related=59831, m1=1.00},\n" +
-            "PurchaseRelationship{product=27111, qty=24, related=59831, m1=1.00},\n" +
-            "PurchaseRelationship{product=60119, qty=23, related=59831, m1=1.00},\n" +
-            "PurchaseRelationship{product=16377, qty=24, related=59831, m1=1.00},\n" +
-            "PurchaseRelationship{product=29932, qty=25, related=59831, m1=0.80},\n" +
-            "PurchaseRelationship{product=53412, qty=26, related=59831, m1=0.60},\n" +
-            "PurchaseRelationship{product=59959, qty=26, related=59831, m1=0.60},\n" +
-            "PurchaseRelationship{product=60353, qty=27, related=59831, m1=0.50},\n" +
-            "PurchaseRelationship{product=56971, qty=27, related=59831, m1=0.50},\n" +
-            "PurchaseRelationship{product=23227, qty=27, related=59831, m1=0.50},\n" +
-            "PurchaseRelationship{product=60028, qty=29, related=59831, m1=0.40},\n" +
-            "PurchaseRelationship{product=57602, qty=28, related=59831, m1=0.40},\n" +
-            "PurchaseRelationship{product=59612, qty=32, related=59831, m1=0.30},\n" +
-            "PurchaseRelationship{product=51360, qty=48, related=59831, m1=0.10},\n" +
-            "PurchaseRelationship{product=57687, qty=60, related=59831, m1=0.10},\n" +
-            "PurchaseRelationship{product=57687, qty=60, related=59831, m1=0.10},\n" +
-            "PurchaseRelationship{product=57687, qty=60, related=59831, m1=0.10},\n" +
-            "PurchaseRelationship{product=59804, qty=53, related=59831, m1=0.10},\n" +
-            "PurchaseRelationship{product=21887, qty=197, related=59831, m1=0.10},\n" +
-            "PurchaseRelationship{product=59467, qty=52, related=59831, m1=0.10}");
+            "PurchaseRelationship{product=19614, qty=5, related=59959, m1=0.50},\n" +
+            "PurchaseRelationship{product=1405, qty=5, related=59959, m1=0.50},\n" +
+            "PurchaseRelationship{product=20835, qty=5, related=59959, m1=0.50},\n" +
+            "PurchaseRelationship{product=42699, qty=5, related=59959, m1=0.50},\n" +
+            "PurchaseRelationship{product=47212, qty=5, related=59959, m1=0.50},\n" +
+            "PurchaseRelationship{product=703, qty=5, related=59959, m1=0.50},\n" +
+            "PurchaseRelationship{product=41114, qty=6, related=59959, m1=0.30},\n" +
+            "PurchaseRelationship{product=23457, qty=6, related=59959, m1=0.30},\n" +
+            "PurchaseRelationship{product=26735, qty=6, related=59959, m1=0.30},\n" +
+            "PurchaseRelationship{product=30062, qty=6, related=59959, m1=0.30},\n" +
+            "PurchaseRelationship{product=56976, qty=7, related=59959, m1=0.20},\n" +
+            "PurchaseRelationship{product=56835, qty=8, related=59959, m1=0.20},\n" +
+            "PurchaseRelationship{product=48641, qty=11, related=59959, m1=0.10},\n" +
+            "PurchaseRelationship{product=59651, qty=25, related=59959, m1=0.10},\n" +
+            "PurchaseRelationship{product=59862, qty=13, related=59959, m1=0.10},\n" +
+            "PurchaseRelationship{product=57687, qty=42, related=59959, m1=0.10},\n" +
+            "PurchaseRelationship{product=55957, qty=35, related=59959, m1=0.10},\n" +
+            "PurchaseRelationship{product=56716, qty=32, related=59959, m1=0.10},\n" +
+            "PurchaseRelationship{product=58212, qty=18, related=59959, m1=0.10},\n" +
+            "PurchaseRelationship{product=59945, qty=24, related=59959, m1=0.10},\n" +
+            "PurchaseRelationship{product=57987, qty=27, related=59959, m1=0.10},\n" +
+            "PurchaseRelationship{product=59831, qty=26, related=59959, m1=0.10},\n" +
+            "PurchaseRelationship{product=59583, qty=112, related=59959, m1=0.10},\n" +
+            "PurchaseRelationship{product=51090, qty=37, related=59959, m1=0.10},\n" +
+            "PurchaseRelationship{product=52706, qty=15, related=59959, m1=0.10},\n" +
+            "PurchaseRelationship{product=47967, qty=16, related=59959, m1=0.10},\n" +
+            "PurchaseRelationship{product=47966, qty=13, related=59959, m1=0.10},\n" +
+            "PurchaseRelationship{product=8491, qty=16, related=59959, m1=0.10},\n" +
+            "PurchaseRelationship{product=57880, qty=9, related=59959, m1=0.10},\n" +
+            "PurchaseRelationship{product=46061, qty=38, related=59959, m1=0.10},\n" +
+            "PurchaseRelationship{product=52226, qty=76, related=59959, m1=0.10},\n" +
+            "PurchaseRelationship{product=47383, qty=11, related=59959, m1=0.10},\n" +
+            "PurchaseRelationship{product=50160, qty=35, related=59959, m1=0.10},\n" +
+            "PurchaseRelationship{product=55707, qty=76, related=59959, m1=0.10},\n" +
+            "PurchaseRelationship{product=51025, qty=49, related=59959, m1=0.10},\n" +
+            "PurchaseRelationship{product=56489, qty=61, related=59959, m1=0.10},\n" +
+            "PurchaseRelationship{product=57629, qty=12, related=59959, m1=0.10},\n" +
+            "PurchaseRelationship{product=57722, qty=58, related=59959, m1=0.10}");
     }
 
     @Test
