@@ -1,8 +1,8 @@
 package org.musicshop.service.impl;
 
+import org.apache.commons.lang3.StringUtils;
 import org.musicshop.service.FileProviderService;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,7 +14,7 @@ public class FileProviderServiceImpl implements FileProviderService {
     @Override
     public String readEntireFile(final String path) {
 
-        if (!StringUtils.hasLength(path))
+        if (StringUtils.isBlank(path))
             throw new IllegalArgumentException("ERROR: can't read null file path.");
 
         final var fileAsString = new StringBuilder();

@@ -77,7 +77,7 @@ public class ExecutionServiceImplTest {
     // Basic smoke tests
     @Test
     public void shouldCorrectlyLoadAndGenerateAllUniqueRelationshipsThenQuit() {
-        final var totalDistinctRelationships = 3336613;
+        final var totalDistinctRelationships = 3157144;
         when(userInputServiceMock.read()).thenReturn("q");
         executionService.initAndRead(false, "src/test/resources/sales-report.json");
         assertEquals(totalDistinctRelationships, FakeStaticDb.getRelationships().size());
@@ -90,43 +90,43 @@ public class ExecutionServiceImplTest {
         executionService.initAndRead(false, "src/test/resources/sales-report.json");
         verify(userOutputServiceMock, times(1)).print(
             "PurchaseRelationship{product=19614, qty=5, related=59959, m1=0.50},\n" +
-            "PurchaseRelationship{product=1405, qty=5, related=59959, m1=0.50},\n" +
-            "PurchaseRelationship{product=20835, qty=5, related=59959, m1=0.50},\n" +
             "PurchaseRelationship{product=42699, qty=5, related=59959, m1=0.50},\n" +
+            "PurchaseRelationship{product=20835, qty=5, related=59959, m1=0.50},\n" +
             "PurchaseRelationship{product=47212, qty=5, related=59959, m1=0.50},\n" +
+            "PurchaseRelationship{product=1405, qty=5, related=59959, m1=0.50},\n" +
             "PurchaseRelationship{product=703, qty=5, related=59959, m1=0.50},\n" +
-            "PurchaseRelationship{product=41114, qty=6, related=59959, m1=0.30},\n" +
-            "PurchaseRelationship{product=23457, qty=6, related=59959, m1=0.30},\n" +
             "PurchaseRelationship{product=26735, qty=6, related=59959, m1=0.30},\n" +
+            "PurchaseRelationship{product=23457, qty=6, related=59959, m1=0.30},\n" +
+            "PurchaseRelationship{product=41114, qty=6, related=59959, m1=0.30},\n" +
             "PurchaseRelationship{product=30062, qty=6, related=59959, m1=0.30},\n" +
             "PurchaseRelationship{product=56976, qty=7, related=59959, m1=0.20},\n" +
             "PurchaseRelationship{product=56835, qty=8, related=59959, m1=0.20},\n" +
-            "PurchaseRelationship{product=48641, qty=11, related=59959, m1=0.10},\n" +
-            "PurchaseRelationship{product=59651, qty=25, related=59959, m1=0.10},\n" +
             "PurchaseRelationship{product=59862, qty=13, related=59959, m1=0.10},\n" +
+            "PurchaseRelationship{product=59651, qty=25, related=59959, m1=0.10},\n" +
             "PurchaseRelationship{product=57687, qty=42, related=59959, m1=0.10},\n" +
-            "PurchaseRelationship{product=55957, qty=35, related=59959, m1=0.10},\n" +
-            "PurchaseRelationship{product=56716, qty=32, related=59959, m1=0.10},\n" +
-            "PurchaseRelationship{product=58212, qty=18, related=59959, m1=0.10},\n" +
-            "PurchaseRelationship{product=59945, qty=24, related=59959, m1=0.10},\n" +
-            "PurchaseRelationship{product=57987, qty=27, related=59959, m1=0.10},\n" +
+            "PurchaseRelationship{product=48641, qty=11, related=59959, m1=0.10},\n" +
             "PurchaseRelationship{product=59831, qty=26, related=59959, m1=0.10},\n" +
             "PurchaseRelationship{product=59583, qty=112, related=59959, m1=0.10},\n" +
-            "PurchaseRelationship{product=51090, qty=37, related=59959, m1=0.10},\n" +
+            "PurchaseRelationship{product=57987, qty=27, related=59959, m1=0.10},\n" +
+            "PurchaseRelationship{product=59945, qty=24, related=59959, m1=0.10},\n" +
+            "PurchaseRelationship{product=56716, qty=32, related=59959, m1=0.10},\n" +
+            "PurchaseRelationship{product=58212, qty=18, related=59959, m1=0.10},\n" +
+            "PurchaseRelationship{product=55957, qty=35, related=59959, m1=0.10},\n" +
+            "PurchaseRelationship{product=8491, qty=16, related=59959, m1=0.10},\n" +
+            "PurchaseRelationship{product=47966, qty=13, related=59959, m1=0.10},\n" +
             "PurchaseRelationship{product=52706, qty=15, related=59959, m1=0.10},\n" +
             "PurchaseRelationship{product=47967, qty=16, related=59959, m1=0.10},\n" +
-            "PurchaseRelationship{product=47966, qty=13, related=59959, m1=0.10},\n" +
-            "PurchaseRelationship{product=8491, qty=16, related=59959, m1=0.10},\n" +
+            "PurchaseRelationship{product=51090, qty=37, related=59959, m1=0.10},\n" +
             "PurchaseRelationship{product=57880, qty=9, related=59959, m1=0.10},\n" +
-            "PurchaseRelationship{product=46061, qty=38, related=59959, m1=0.10},\n" +
+            "PurchaseRelationship{product=57629, qty=12, related=59959, m1=0.10},\n" +
             "PurchaseRelationship{product=52226, qty=76, related=59959, m1=0.10},\n" +
+            "PurchaseRelationship{product=56489, qty=61, related=59959, m1=0.10},\n" +
             "PurchaseRelationship{product=47383, qty=11, related=59959, m1=0.10},\n" +
-            "PurchaseRelationship{product=50160, qty=35, related=59959, m1=0.10},\n" +
+            "PurchaseRelationship{product=46061, qty=38, related=59959, m1=0.10},\n" +
             "PurchaseRelationship{product=55707, qty=76, related=59959, m1=0.10},\n" +
             "PurchaseRelationship{product=51025, qty=49, related=59959, m1=0.10},\n" +
-            "PurchaseRelationship{product=56489, qty=61, related=59959, m1=0.10},\n" +
-            "PurchaseRelationship{product=57629, qty=12, related=59959, m1=0.10},\n" +
-            "PurchaseRelationship{product=57722, qty=58, related=59959, m1=0.10}");
+            "PurchaseRelationship{product=57722, qty=58, related=59959, m1=0.10},\n" +
+            "PurchaseRelationship{product=50160, qty=35, related=59959, m1=0.10}");
     }
 
     @Test

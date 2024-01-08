@@ -48,6 +48,7 @@ public class ExecutionServiceImpl implements ExecutionService {
                 final var relatedProductsMessage = FakeStaticDb.getRelationships()
                         .stream()
                         .filter(relationship -> relationship.getRelated() == Long.parseLong(userInput))
+                        .distinct() // Deduplicate across groups
                         .map(Object::toString)
                         .collect(Collectors.joining(",\n"));
 

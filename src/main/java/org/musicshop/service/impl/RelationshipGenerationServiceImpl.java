@@ -27,30 +27,37 @@ public class RelationshipGenerationServiceImpl implements RelationshipGeneration
                     .map(purchasedProductId -> allPurchases.stream().filter(product -> product.getProduct() == purchasedProductId).findAny().orElseThrow(RuntimeException::new))
                     .toList();
 
+            final var deduplicatedGroupedRelationships = new HashSet<Relationship>();
+
             for (int i = 0; i < relatedItems.size(); i ++) {
                 final var relatedZero = relatedItems.get(i);
-                for (int x = 1; x < relatedItems.size(); x ++) {
-                    final var relatedOne = relatedItems.get(x);
+                for (final ProductInfo relatedOne : relatedItems) {
                     if (relatedZero.getProduct() == relatedOne.getProduct())
                         continue;
 
-                    final var purchaseRelationship = new PurchaseRelationship();
-                    final var totalPurchasedBoth = relatedZero.getQty() + relatedOne.getQty();
-                    // Calculate relationship correlation factor.
-                    final var m1CorrelationFactor = (totalPurchasedBoth / relatedZero.getQty());
-                    final var finalM1BetweenZeroAndOne = Math.min((m1CorrelationFactor * .1), 1d);
-
-                    purchaseRelationship.setProduct(relatedZero.getProduct());
-                    purchaseRelationship.setRelated(relatedOne.getProduct());
-                    purchaseRelationship.setQty(totalPurchasedBoth);
-                    purchaseRelationship.setM1(finalM1BetweenZeroAndOne);
-                    productRelationships.add(purchaseRelationship);
+                    final var purchaseRelationship = createPurchaseRelationship(relatedZero, relatedOne);
+                    deduplicatedGroupedRelationships.add(purchaseRelationship);
                 }
             }
+            productRelationships.addAll(deduplicatedGroupedRelationships);
         }
 
         sortByDescCorrelationFactor(productRelationships);
         return productRelationships;
+    }
+
+    private static PurchaseRelationship createPurchaseRelationship(ProductInfo relatedZero, ProductInfo relatedOne) {
+        final var purchaseRelationship = new PurchaseRelationship();
+        final var totalPurchasedBoth = relatedZero.getQty() + relatedOne.getQty();
+        // Calculate relationship correlation factor.
+        final var m1CorrelationFactor = (totalPurchasedBoth / relatedZero.getQty());
+        final var finalM1BetweenZeroAndOne = Math.min((m1CorrelationFactor * .1), 1d);
+
+        purchaseRelationship.setProduct(relatedZero.getProduct());
+        purchaseRelationship.setRelated(relatedOne.getProduct());
+        purchaseRelationship.setQty(totalPurchasedBoth);
+        purchaseRelationship.setM1(finalM1BetweenZeroAndOne);
+        return purchaseRelationship;
     }
 
     private static void sortByDescCorrelationFactor(final List<Relationship> relationships) {

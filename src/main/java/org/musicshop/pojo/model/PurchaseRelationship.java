@@ -44,6 +44,17 @@ public class PurchaseRelationship extends ProductInfo implements Relationship {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (o == null)
+            return false;
+
+        final PurchaseRelationship to_compare = (PurchaseRelationship) o;
+
+        return this.getProduct() == to_compare.getProduct() &&
+                this.getRelated() == to_compare.getRelated();
+    }
+
+    @Override
     public String toString() {
         return "PurchaseRelationship{" +
                 "product=" + super.getProduct() +
